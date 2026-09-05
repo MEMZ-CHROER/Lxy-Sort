@@ -528,6 +528,17 @@ static inline void lxyRadixSort(std::vector<T>& a) {
         for (int i = 0; i < n; ++i) adata[i] = lxy_detail::fromKey<T>(kB[i]);
     }
 }
+template<typename Container>
+static inline void lxyRadixSort(Container& c) {
+    using std::begin;
+    using std::end;
+    auto first = begin(c);
+    auto last = end(c);
+    using T = typename std::iterator_traits<decltype(first)>::value_type;
+    std::vector<T> v(first, last);
+    lxyRadixSort(v);
+    std::move(v.begin(), v.end(), first);
+}
 
 // ===========================================================================
 // MSD radix sort for std::string (stable, O(n * avg length))
@@ -952,6 +963,17 @@ static inline void lxyMerge2(std::vector<T>& a, T* tmp, int l, int m, int r, Com
     while (p < m) tmp[o++] = std::move(a[p++]);
     while (q < r) tmp[o++] = std::move(a[q++]);
     for (int i = l; i < r; ++i) a[i] = std::move(tmp[i]);
+}
+template<typename Container>
+static inline void lxySort(Container& c) {
+    using std::begin;
+    using std::end;
+    auto first = begin(c);
+    auto last = end(c);
+    using T = typename std::iterator_traits<decltype(first)>::value_type;
+    std::vector<T> v(first, last);
+    lxySort(v);
+    std::move(v.begin(), v.end(), first);
 }
 
 template<typename T, typename Comp>
